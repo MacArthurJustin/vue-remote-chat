@@ -26,18 +26,31 @@
       </q-card>
 
       <div class="row absolute full-width full-height" v-if="username !== ''">
-        <q-list dense class="col-sm-12 col-md-10 overflow-auto">
-          <q-item
-            v-for="message in messages"
-            :key="message"
-          >
-            <q-item-main>
-              <q-item-tile label>
-                {{ message }}
-              </q-item-tile>
-            </q-item-main>
-          </q-item>
-        </q-list>
+        <q-scroll-area
+          ref="scrollArea"
+          class="col-sm-12 col-md-10"
+          :thumb-style="{
+            right: '4px',
+            borderRadius: '5px',
+            background: 'red',
+            width: '10px',
+            opacity: 1
+          }"
+          :delay="1500"
+        >
+          <q-list dense no-border>
+            <q-item
+              v-for="message in messages"
+              :key="message"
+            >
+              <q-item-main>
+                <q-item-tile label>
+                  {{ message }}
+                </q-item-tile>
+              </q-item-main>
+            </q-item>
+          </q-list>
+        </q-scroll-area>
         <q-list dense class="col-md-2 desktop-only no-margin">
           <q-list-header>
             Users
@@ -76,7 +89,8 @@
 <script>
   import {
     QBtn, QCard, QCardTitle, QCardSeparator, QCardMain, QCardActions, QField, QInput,
-    QItem, QItemMain, QItemTile, QLayout, QList, QListHeader, QModal, QModalLayout, QToolbar, QToolbarTitle
+    QItem, QItemMain, QItemTile, QLayout, QList, QListHeader, QModal, QModalLayout,
+    QScrollArea, QToolbar, QToolbarTitle
   } from 'quasar'
 
   export default {
@@ -97,6 +111,7 @@
       QListHeader,
       QModal,
       QModalLayout,
+      QScrollArea,
       QToolbar,
       QToolbarTitle
     },
@@ -117,7 +132,12 @@
         this.username = data.username
       },
       messageSend (data) {
-        this.messages.unshift(data.message)
+        this.messages.push(data.message)
+        this.$nextTick(
+          () => {
+            this.$refs.scrollArea.setScrollPosition(this.$refs.scrollArea.scrollHeight + 1000)
+          }
+        )
       }
     },
     methods: {

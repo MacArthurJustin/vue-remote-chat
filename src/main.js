@@ -19,6 +19,8 @@ Vue.config.productionTip = false
 Vue.use(Quasar) // Install Quasar Framework
 Vue.use(VueRemote,
   {
+    secure: false,
+    host: 'localhost',
     port: 8081
   }
 )
