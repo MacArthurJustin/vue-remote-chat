@@ -35,7 +35,8 @@ function messageHandler (data, connection) {
     case 'send-message':
       let message = {
         identifier: 'message-send',
-        message: `${data.username}: ${data.message}`
+        user: data.username,
+        message: data.message
       }
 
       for (let user in users) {
@@ -66,5 +67,5 @@ Server({
   messageHandler: messageHandler,
   connectHandler: connectHandler,
   disconnectHandler: disconnectHandler,
-  port: 8081
+  port: 65000
 })

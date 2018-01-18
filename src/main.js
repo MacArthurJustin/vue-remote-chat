@@ -21,7 +21,7 @@ Vue.use(VueRemote,
   {
     secure: false,
     host: 'localhost',
-    port: 8081
+    port: 65000
   }
 )
 

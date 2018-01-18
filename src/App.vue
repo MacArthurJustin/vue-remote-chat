@@ -40,12 +40,12 @@
         >
           <q-list dense no-border>
             <q-item
-              v-for="message in messages"
-              :key="message"
+              v-for="(data, index) in processedMessages"
+              :key="index"
             >
               <q-item-main>
-                <q-item-tile label>
-                  {{ message }}
+                <q-item-tile label style="display: flex">
+                  {{ data.user }}: <div style="display: inline-block" v-html="data.messages.join('<br/>')"></div>
                 </q-item-tile>
               </q-item-main>
             </q-item>
@@ -115,6 +115,22 @@
       QToolbar,
       QToolbarTitle
     },
+    computed: {
+      processedMessages () {
+        let messageArray = []
+        this.messages.forEach(
+          (message) => {
+            if (messageArray.length === 0 || messageArray[messageArray.length - 1].user !== message.user) {
+              messageArray.push({user: message.user, messages: []})
+            }
+
+            messageArray[messageArray.length - 1].messages.push(message.message)
+          }
+        )
+
+        return messageArray
+      }
+    },
     data () {
       return {
         message: '',
@@ -132,7 +148,7 @@
         this.username = data.username
       },
       messageSend (data) {
-        this.messages.push(data.message)
+        this.messages.push(data)
         this.$nextTick(
           () => {
             this.$refs.scrollArea.setScrollPosition(this.$refs.scrollArea.scrollHeight + 1000)
